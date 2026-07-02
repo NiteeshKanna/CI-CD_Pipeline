@@ -16,7 +16,7 @@ def home():
     return {"message": "FastAPI is running"}
 
 
-@app.get("/add")
+@app.get("/add/{a}/{b}")
 def addition(a: int, b: int):
     return {
         "operation": "addition",
@@ -26,7 +26,7 @@ def addition(a: int, b: int):
     }
 
 
-@app.get("/sub")
+@app.get("/sub/{a}/{b}")
 def subtraction(a: int, b: int):
     return {
         "operation": "subtraction",
