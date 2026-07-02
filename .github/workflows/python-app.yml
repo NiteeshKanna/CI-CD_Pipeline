@@ -72,10 +72,13 @@ jobs:
 
                 . venv/bin/activate
 
-                python -m pip install --upgrade pip
-
                 pip install -r requirements.txt
 
-                python -m uvicorn src.app:app \
+                pkill -f uvicorn || true
+
+                nohup python -m uvicorn src.app:app \
                 --host 0.0.0.0 \
-                --port 5000
+                --port 5000 \
+                > app.log 2>&1 < /dev/null &
+
+                exit 0
