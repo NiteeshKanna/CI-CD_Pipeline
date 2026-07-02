@@ -76,9 +76,6 @@ jobs:
 
                 pip install -r requirements.txt
 
-                pkill -f uvicorn || true
-
-                nohup python -m uvicorn src.app:app \
+                python -m uvicorn src.app:app \
                 --host 0.0.0.0 \
-                --port 5000 \
-                > app.log 2>&1 &
+                --port 5000
