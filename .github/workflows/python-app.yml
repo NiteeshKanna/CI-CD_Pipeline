@@ -37,3 +37,36 @@ jobs:
     - name: Test with pytest
       run: |
         pytest
+
+  deploy:
+
+    needs: build
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Copy Files to EC2
+        uses: appleboy/scp-action@v0.1.7
+
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "."
+          target: "/home/ubuntu/app"
+  
+      - name: Start Application
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+            host: ${{ secrets.EC2_HOST }}
+            username: ${{ secrets.EC2_USER }}
+            key: ${{ secrets.EC2_SSH_KEY }}
+            script: |
+                cd /home/ubuntu/app
+                pip3 install -r requirements.txt
+                pkill -f uvicorn || true
+                nohup uvicorn src.app:app --host 0.0.0.0 --port 5000 > app.log 2>&1 &
