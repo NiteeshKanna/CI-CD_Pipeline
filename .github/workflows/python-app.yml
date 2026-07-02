@@ -70,15 +70,15 @@ jobs:
 
                 python3 -m venv venv
 
-                source venv/bin/activate
+                . venv/bin/activate
 
-                pip install --upgrade pip
+                python -m pip install --upgrade pip
 
                 pip install -r requirements.txt
 
                 pkill -f uvicorn || true
 
-                nohup venv/bin/uvicorn src.app:app \
+                nohup python -m uvicorn src.app:app \
                 --host 0.0.0.0 \
                 --port 5000 \
                 > app.log 2>&1 &
