@@ -68,16 +68,15 @@ jobs:
             script: |
                 cd /home/ubuntu/app
 
-                python3 -m venv venv
-
                 . venv/bin/activate
 
-                python -m pip install --upgrade pip
+                pkill -f uvicorn || true
 
-                pip install -r requirements.txt
-
-                python -m uvicorn src.app:app \
+                nohup python -m uvicorn src.app:app \
                 --host 0.0.0.0 \
-                --port 5000
+                --port 5000 \
+                > app.log 2>&1 < /dev/null &
+
+                sleep 5
 
                 exit 0
